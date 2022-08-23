@@ -3,6 +3,7 @@ import {read} from 'to-vfile'
 import remarkParse from 'remark-parse'
 import remarkGfm from 'remark-gfm'
 import remarkStringify from 'remark-stringify'
+import remarkFrontmatter from 'remark-frontmatter'
 import { codeImport } from 'remark-code-import'
 import fs from 'fs'
 import path from 'path'
@@ -56,6 +57,7 @@ function transform(doc) {
   .use(remarkGfm)
   .use(codeImport)
   .use(remarkStringify)
+  .use(remarkFrontmatter)
   .process(doc)
 }
 
