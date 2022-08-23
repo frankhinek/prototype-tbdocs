@@ -9,6 +9,25 @@ import path from 'path'
 import glob from 'glob'
 
 /**
+ * Synchronously copy files, creating directories if they do not exist.
+ * @param {string} filepath
+ * @param {string} content
+ */
+ function copyFileSyncRecursive(src, dest) {
+  fs.mkdirSync(path.dirname(dest), {recursive: true})
+  fs.copyFileSync(src, dest)
+}
+
+/**
+ * Find all images sub-directories.
+ * @param {string} input_dir
+ * @returns {string[]}
+ */
+ function findImages(dir) {
+  return glob.sync(dir + '/**/images/*')
+}
+
+/**
  * Find all documentation Markdown (.md) files in a directory.
  * @param {string} input_dir
  * @returns {string[]}
@@ -19,7 +38,7 @@ function findMarkdownDocs(dir) {
 
 /**
  * Reads in from a filepath and creates a vfile.
- * @param {string} filename 
+ * @param {string} filename
  * @returns {Promise<VFile>}
  */
 async function readFile(filepath) {
@@ -28,7 +47,7 @@ async function readFile(filepath) {
 
 /**
  * Transforms Markdown VFile using specified plugins.
- * @param {VFile} doc 
+ * @param {VFile} doc
  * @returns {Promise<VFile>}
  */
 function transform(doc) {
@@ -50,4 +69,4 @@ function writeFileSyncRecursive(filepath, content) {
   fs.writeFileSync(filepath, content, 'utf-8')
 }
 
-export { findMarkdownDocs, readFile, transform, writeFileSyncRecursive }
+export default { copyFileSyncRecursive, findImages, findMarkdownDocs, readFile, transform, writeFileSyncRecursive }
