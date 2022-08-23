@@ -1,0 +1,1 @@
+curl -X PUT -d '{"keyType":"secp256k1"}' localhost:8080/v1/dids/key
