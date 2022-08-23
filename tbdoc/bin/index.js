@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
-import { findMarkdownDocs, readFile, transform, writeFileSyncRecursive } from './utils.js'
+import utils from './utils.js'
 
 yargs(hideBin(process.argv))
   .usage('Usage: $0 <command> [options]')
@@ -18,16 +18,24 @@ yargs(hideBin(process.argv))
     },
     async (argv) => {
       if (argv.verbose) console.info(`Searching ${argv.input_dir} for Markdown files...\n`)
-
-      const docFiles = findMarkdownDocs(argv.input_dir)
-      const docCount = docFiles.length
       
-      for(const filepath of docFiles) {
-        const inputMarkdown = await readFile(filepath)
-        if (argv.verbose) console.info(`Transforming ${filepath}...`)
-        const outputMarkdown = await transform(inputMarkdown)
-        const outputPath = filepath.replace(argv.input_dir, argv.output_dir);
-        writeFileSyncRecursive(outputPath, String(outputMarkdown))
+      // Parse, transform, and serialize Markdown docs to the output directory.
+      const docFiles = utils.findMarkdownDocs(argv.input_dir)
+      const docCount = docFiles.length
+      for(let filepath of docFiles) {
+        let inputMarkdown = await utils.readFile(filepath)
+        let outputMarkdown = await utils.transform(inputMarkdown)
+        let outputPath = filepath.replace(argv.input_dir, argv.output_dir);
+        utils.writeFileSyncRecursive(outputPath, String(outputMarkdown))
+        if (argv.verbose) console.info(`Transformed ${filepath}`)
+      }
+      
+      // Copy image files to the output directory.
+      const imageFiles = utils.findImages(argv.input_dir)
+      for(let srcPath of imageFiles) {
+        let destPath = srcPath.replace(argv.input_dir, argv.output_dir);
+        utils.copyFileSyncRecursive(srcPath, destPath)
+        if (argv.verbose) console.info(`Copied ${srcPath}`)
       }
 
       console.info(`\nCompleted building ${docCount} documents.`)
