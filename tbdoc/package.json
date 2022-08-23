@@ -1,0 +1,31 @@
+{
+  "name": "tbdoc",
+  "version": "1.0.0",
+  "description": "Command line utility to transform Markdown files",
+  "author": "Frank Hinek",
+  "keywords": [
+    "cli"
+  ],
+  "main": "bin/index.js",
+  "type": "module",
+  "bin": {
+    "tbdoc": "./bin/index.js"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "Unlicense",
+  "dependencies": {
+    "glob": "^8.0.3",
+    "remark-code-import": "^1.1.1",
+    "remark-gfm": "^3.0.1",
+    "remark-parse": "^10.0.1",
+    "remark-stringify": "^10.0.2",
+    "to-vfile": "^7.2.3",
+    "unified": "^10.1.2",
+    "yargs": "^17.5.1"
+  }
+}
