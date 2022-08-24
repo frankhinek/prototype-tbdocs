@@ -20,3 +20,10 @@ Markdown and associated images to your local `build` directory:
 ```sh
 docker run --rm -v "$PWD/topics":/app/topics -v "$PWD/build":/app/build tbdoc:1.0.0
 ```
+
+Another example to demonstrate changing the source files directory to `input` and the
+directory to store transformed documents to `output`:
+
+```sh
+docker run --rm -v "$PWD/input":/app/topics -v "$PWD/output":/app/build tbdoc:1.0.0
+```
