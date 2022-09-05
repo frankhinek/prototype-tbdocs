@@ -1,6 +1,10 @@
 name: Generate Docs Preview
 
-on: workflow_dispatch
+on:
+
+  workflow_dispatch:
+  push:
+    branches: [ "main", "feat/github-actions"]
 
 jobs:
 
