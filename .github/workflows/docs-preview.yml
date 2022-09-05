@@ -15,6 +15,12 @@ jobs:
     steps:
     - name: Checkout tbdocs repository
       uses: actions/checkout@v3
+      
+    - name: Checkout mock developer site repository
+      uses: actions/checkout@v3
+      with:
+        repository: frankhinek/prototype-tbdocusaurus
+        path: developer-site
     
     - name: Build the tbdoc Docker image
       run: docker build -t tbdoc:1.0.0 tbdoc
@@ -23,4 +29,4 @@ jobs:
       run: docker run --rm -v "$PWD/topics":/app/topics -v "$PWD/build":/app/build tbdoc:1.0.0
 
     - name: print out directory contents
-      run: tree build/
+      run: tree .
