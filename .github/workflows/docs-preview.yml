@@ -23,4 +23,4 @@ jobs:
       run: docker run --rm -v "$PWD/topics":/app/topics -v "$PWD/build":/app/build tbdoc:1.0.0
 
     - name: print out directory contents
-      run: ls -al build/
+      run: tree build/
