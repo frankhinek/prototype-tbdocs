@@ -19,5 +19,8 @@ jobs:
     - name: Build the tbdoc Docker image
       run: docker build -t tbdoc:1.0.0 tbdoc
 
+    - name: generate markdown files
+      run: docker run --rm -v "$PWD/topics":/app/topics -v "$PWD/build":/app/build tbdoc:1.0.0
+
     - name: print out directory contents
       run: ls -al
