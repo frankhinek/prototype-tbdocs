@@ -14,16 +14,16 @@ To build the image:
 docker build -t tbdoc:1.0.0 tbdoc
 ```
 
-To process all Markdown (.md) files in your local `topics` directory and output the transformed
+To process all Markdown (.md) files in your local `docs` directory and output the transformed
 Markdown and associated images to your local `build` directory:
 
 ```sh
-docker run --rm -v "$PWD/topics":/app/topics -v "$PWD/build":/app/build tbdoc:1.0.0
+docker run --rm -v "$PWD/docs":/app/docs -v "$PWD/build":/app/build tbdoc:1.0.0
 ```
 
 Another example to demonstrate changing the source files directory to `input` and the
 directory to store transformed documents to `output`:
 
 ```sh
-docker run --rm -v "$PWD/input":/app/topics -v "$PWD/output":/app/build tbdoc:1.0.0
+docker run --rm -v "$PWD/input":/app/docs -v "$PWD/output":/app/build tbdoc:1.0.0
 ```

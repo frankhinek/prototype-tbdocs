@@ -9,7 +9,7 @@ yargs(hideBin(process.argv))
       yargs
         .positional('input_dir', {
           describe: 'directory containing source docs',
-          default: 'topics',
+          default: 'docs',
         })
         .positional('output_dir', {
           describe: 'output directory for transformed docs',

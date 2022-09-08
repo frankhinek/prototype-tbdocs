@@ -9,6 +9,6 @@ RUN npm install
 COPY ./bin /app/bin
 RUN npm link
 
-VOLUME /app/topics /app/build
+VOLUME /app/docs /app/build
 
 ENTRYPOINT ["tbdoc", "build"]
