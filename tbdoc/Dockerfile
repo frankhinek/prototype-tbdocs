@@ -4,7 +4,7 @@ FROM node:16-alpine
 ARG APP_DIR="/home/node/app"
 
 # Switch to the `node` user vs. root
-USER node
+# USER node
 
 # Install and run the app from the `node` user's home directory
 RUN mkdir ${APP_DIR}
@@ -18,9 +18,9 @@ RUN npm install
 COPY ./bin ${APP_DIR}/bin
 
 # Switch to root temporarily to link the package to the global node_modules directory
-USER root
+# USER root
 RUN npm link
-USER node
+# USER node
 
 # Specify a mount point in the container that will be mapped to a directory
 # on the host when the container is started.
