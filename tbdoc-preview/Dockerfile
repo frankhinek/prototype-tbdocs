@@ -2,7 +2,7 @@ FROM node:16-alpine
 
 # Define variables
 ARG GIT_ORG="frankhinek"
-ARG GIT_REPO="temp-dev-site"
+ARG GIT_REPO="prototype-tbdocusaurus"
 ARG GIT_BRANCH="main"
 ARG GIT_URL="https://github.com/${GIT_ORG}/${GIT_REPO}/archive/refs/heads/${GIT_BRANCH}.zip"
 ARG APP_DIR="/home/node/app"
