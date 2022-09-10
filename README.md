@@ -51,12 +51,12 @@ To process all Markdown (.md) files in your local `docs` directory and output th
 Markdown and associated images to your local `build` directory:
 
 ```sh
-docker run --rm -v "$PWD/docs":/home/node/app/docs -v "$PWD/build":/home/node/app/build tbdoc:1.0.0
+docker run --rm -v "$PWD/docs":/app/docs -v "$PWD/build":/app/build tbdoc:1.0.0
 ```
 
 Another example to demonstrate changing the source files directory to `input` and the
 directory to store transformed documents to `output`:
 
 ```sh
-docker run --rm -v "$PWD/input":/home/node/app/docs -v "$PWD/output":/app/build tbdoc:1.0.0
+docker run --rm -v "$PWD/input":/app/docs -v "$PWD/output":/app/build tbdoc:1.0.0
 ```
