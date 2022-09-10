@@ -1,0 +1,101 @@
+name: Open Dev Site PR
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout tbdocs repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Build the tbdoc Docker image
+        run: docker build -t tbdoc:1.0.0 tbdoc
+
+      - name: Generate markdown files
+        run: docker run --rm -v "$PWD/docs":/app/docs -v "$PWD/build":/app/build tbdoc:1.0.0
+    
+      - name: Archive markdown document artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: markdown-docs
+          path: build
+          
+  open_pr:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-20.04
+    
+    # This job can't begin until the build job completes
+    needs: build
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out the Developer site repository under $GITHUB_WORKSPACE, so this job can access it
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.TBD_DEV_SITE_PAT }}
+          repository: frankhinek/prototype-tbdocusaurus
+          fetch-depth: 0
+      
+      - name: print out directory contents BEFORE
+        run: tree .
+        
+      # Download post-processsed markdown documents to docs/ directory
+      - name: Download markdown documents
+        uses: actions/download-artifact@v3
+        with:
+          name: markdown-docs
+          path: docs-new
+
+      # Replace the existing docs with the revised version
+      - name: Overwrite with revised docs
+        run: |
+          rsync -a --delete docs-new/ docs/
+          rm -rf docs-new
+
+      - name: print out directory contents AFTER
+        run: tree .
+        
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
+      - name: Set SHA short variable
+        id: vars
+        run: |
+          echo "::set-output name=sha_short::$(git rev-parse --short ${{ github.sha }})"
+
+      # Open a Pull Request in the TBD Developer site repository
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@18f90432bedd2afd6a825469ffd38aa24712a91d # v4.1.1
+        with:
+          #branch: docs/contrib-${{ steps.vars.outputs.sha_short }}
+          branch: docs/contrib
+          commit-message: ${{ github.event.head_commit.message }}
+          title: '[DOCS] Community Contribution'
+          body: |
+            ## Community Contributed Documentation
+            
+            Please review the Deployment Preview and provide feedback on the PR.
+            
+            - Contribution by [${{ github.event.head_commit.author.name }}](https://github.com/${{ github.event.head_commit.author.username }})
+            - Original commit: [${{ steps.vars.outputs.sha_short }}](${{ github.event.head_commit.url }})
+          labels: |
+            documentation
+            automated pr
+          team-reviewers: |
+            owners
+            maintainers
+          token: ${{ secrets.TBD_DEV_SITE_PAT }}
